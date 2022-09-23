@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch JSON from API and map lat lon</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+   integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+   crossorigin=""/>
+
+   <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+   integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+   crossorigin=""></script>
+   <style>
+    #map { height: 600px; }
+   </style>
+</head>
+<body>
+    <h1>Where is the ISS?</h1>
+    <p>latitude: <span id="latt"></span>
+        longitude: <span id="lonn"></span>
+        <div id="map"></div>
+
+    </p>
+    <script>
+
+var myIcon = L.icon({
+    iconUrl: '1666215_dbbba.png',
+    iconSize: [95, 95],
+    iconAnchor: [22, 94]
+    
+});
+
+        const  map = L.map('map').setView([0, 0], 1);
+        const marker = L.marker([1,1], {icon: myIcon}).addTo(map)
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+        const api_URL = "https://api.wheretheiss.at/v1/satellites/25544"
+        async function getISS(){
+            const response = await fetch(api_URL)
+            const data = await response.json()
+            const { latitude, longitude } = data;
+            document.getElementById("latt").textContent = latitude;
+            document.getElementById("lonn").textContent = longitude;
+            marker.setLatLng([latitude], longitude)
+            // L.marker([latitude, longitude]).addTo(map)
+        }
+        getISS();
+        const people = [
+            {name:"cknkw", age:18, budget:3939},
+            {name:"cknkw", age:17, budget:3939},
+            {name:"cknkw", age:17, budget:3939}
+        ]
+        /*forEach
+        for(let i=0; i<people.length; i++){
+            console.log(people[i])
+        }
+        выводит элементы
+        for(let person of people){
+            console.log(person)
+        }
+        выводит индекс
+        for(i in people){
+            console.log(i)
+        }
+        people.forEach(function(person, index, pArr){
+            console.log(person)
+        });
+        people.forEach(person => console.log(person))
+        */
+         /*map
+         const newPeople = people.map(person =>  person.name)
+         console.log(newPeople)
+         */
+        //filter
+        // const adults = people.filter(person => person.age>=18)
+        // console.log(adults)
+        // let amount =0;
+        // for(let i=0; i<people.length; i++){
+        //     amount+=people[i].budget;
+        // }
+        // const amount = people.reduce((total, person) => total+=person.budget, 0);
+        // console.log(amount)
+         const orders = [
+            {
+              userId:1,
+              budget:1393
+            },
+            {
+                userId:3,
+                budget:8393
+            },
+            {
+                userId:3,
+                budget:39303
+            }
+         ]
+         const amount = orders.filter(orders => orders.userId === 3).map(orders => orders.budget).reduce((a, b)=>a+b);
+         console.log(amount)
+    </script>
+    <script src="promises.js"></script>
+</body>
+</html>
